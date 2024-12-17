@@ -1,85 +1,143 @@
-#include<iostream> 
-#include<cmath> 
-#include<stack> 
-using namespace std; 
- 
-float operation(int, int, char) ; 
-float scanNum(char); 
-int isOperator(char); 
-int isOperand(char); 
- 
-float scanNum(char ch)  
-{ 
-   int value; 
-   value = ch; 
-   return float(value-'0');   //return float from character 
-} 
- 
-int isOperator(char ch)  
-{ 
-   if(ch == '+'|| ch == '-'|| ch == '*'|| ch == '/' || ch == '^') 
-      return 1;    //character is an operator 
-   return -1;   //not an operator 
-} 
- 
-int isOperand(char ch) 
-{ 
-   if(ch >= '0' && ch <= '9') 
-      return 1;   //character is an operand 
-   return -1;   //not an operand 
-} 
- 
-float operation(int a, int b, char op)  
-{ 
-    float INT_MIN;; 
-   //Perform operation 
-   if(op == '+') 
-      return b+a; 
-   else if(op == '-') 
-      return b-a; 
-   else if(op == '*') 
-      return b*a; 
-   else if(op == '/') 
-      return b/a; 
-   else if(op == '^') 
-      return pow(b,a); //find b^a 
-   else 
-      return INT_MIN; //return negative infinity 
-} 
- 
-float postfixEval(string postfix)  
-{ 
-   int a, b; 
- 
-   stack<float> stk; 
-   string::iterator it; 
-     
-   for(it=postfix.begin();  
-       it!=postfix.end(); it++)  
-     { 
-      //read elements and perform postfix evaluation 
-      if(isOperator(*it) != -1) 
-      { 
-         a = stk.top(); 
-         stk.pop(); 
-         b = stk.top(); 
-         stk.pop(); 
-         stk.push(operation(a, b, *it)); 
-      } 
-        
-     else if(isOperand(*it) > 0)  
-      { 
-         stk.push(scanNum(*it)); 
-      } 
-   } 
-   return stk.top(); 
-} 
- 
-main()  
-{ 
-   char postfix[10];; 
-   cout<<"Enter postfix Expression:\n"; 
-   cin>>postfix; 
-   cout << "The result is: "<<postfixEval(postfix); 
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Stack class
+class Stack {
+private:
+    Node* top;
+public:
+    Stack() { top = nullptr; }
+
+    // Function to push an element onto the stack
+    void push(int x) {
+        Node* t = new Node;
+        if (t == nullptr) {
+            cout << "Stack Overflow" << endl;
+        } else {
+            t->data = x;
+            t->next = top;
+            top = t;
+        }
+    }
+
+    // Function to pop an element from the stack
+    int pop() {
+        int x = -1;
+        if (top == nullptr) {
+            cout << "Stack Underflow" << endl;
+        } else {
+            Node* t = top;
+            top = top->next;
+            x = t->data;
+            delete t;
+        }
+        return x;
+    }
+
+    // Function to check if the stack is empty
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    // Function to get the top element of the stack
+    int stackTop() {
+        if (top)
+            return top->data;
+        return -1;
+    }
+};
+
+### Step 2: Evaluating a Postfix Expression
+
+```cpp
+#include <iostream>
+#include <string>
+#include <cctype> // For isdigit function
+using namespace std;
+
+class Stack {
+private:
+    struct Node {
+        int data;
+        Node* next;
+    };
+    Node* top;
+public:
+    Stack() { top = nullptr; }
+
+    void push(int x) {
+        Node* t = new Node;
+        if (t == nullptr) {
+            cout << "Stack Overflow" << endl;
+        } else {
+            t->data = x;
+            t->next = top;
+            top = t;
+        }
+    }
+
+    int pop() {
+        int x = -1;
+        if (top == nullptr) {
+            cout << "Stack Underflow" << endl;
+        } else {
+            Node* t = top;
+            top = top->next;
+            x = t->data;
+            delete t;
+        }
+        return x;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    int stackTop() {
+        if (top)
+            return top->data;
+        return -1;
+    }
+};
+
+// Function to evaluate postfix expression
+int evaluatePostfix(string postfix) {
+    Stack stk;
+    for (char &ch : postfix) {
+        if (isdigit(ch)) {
+            stk.push(ch - '0'); // Convert char to int and push to stack
+        } else {
+            int val2 = stk.pop();
+            int val1 = stk.pop();
+            switch (ch) {
+                case '+':
+                    stk.push(val1 + val2);
+                    break;
+                case '-':
+                    stk.push(val1 - val2);
+                    break;
+                case '*':
+                    stk.push(val1 * val2);
+                    break;
+                case '/':
+                    stk.push(val1 / val2);
+                    break;
+            }
+        }
+    }
+    return stk.pop();
 }
 
+int main() {
+    string postfix = "231*+9-";
+    cout << "Postfix Expression: " << postfix << endl;
+    cout << "Evaluation Result: " << evaluatePostfix(postfix) << endl;
+    return 0;
+}
