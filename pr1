@@ -3,7 +3,7 @@ Q1. Consider a student database of SEIT class. Database contains different field
 #include <string>
 using namespace std;
 
-// Structure to store student details
+// Structure to store student details 
 struct Student {
     int rollNo;
     string name;
