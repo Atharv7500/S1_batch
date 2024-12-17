@@ -1,0 +1,184 @@
+Q1. Consider a student database of SEIT class. Database contains different fields of every student like Roll No, Name and SGPA.Design a roll call list, arrange list of in ascending order (Use Bubble Sort)
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Structure to store student details
+struct Student {
+    int rollNo;
+    string name;
+    float sgpa;
+};
+
+// Function to perform bubble sort
+void bubbleSort(Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j].rollNo > arr[j + 1].rollNo) {
+                // Swap the students
+                Student temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Function to print the student list
+void printStudentList(Student arr[], int n) {
+    cout << "Roll No\tName\tSGPA" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i].rollNo << "\t" << arr[i].name << "\t" << arr[i].sgpa << endl;
+    }
+}
+
+int main() {
+    int n;
+
+    // Sample list of students
+    Student students[] = {
+        {3, "Alice", 8.5},
+        {1, "Bob", 9.0},
+        {2, "Charlie", 7.8}
+    };
+
+    // Size of the array
+    n = sizeof(students) / sizeof(students[0]);
+
+    // Sort the students by roll number
+    bubbleSort(students, n);
+
+    // Print the sorted list
+    printStudentList(students, n);
+
+    return 0;
+}
+ 
+Q2. Consider a student database of SEIT class. Database contains different fields of every student like Roll No, Name and SGPA. Arrange list of students according to name. (Use Insertion sort)
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Structure to store student details
+struct Student {
+    int rollNo;
+    string name;
+    float sgpa;
+};
+
+// Function to perform insertion sort
+void insertionSort(Student arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        Student key = arr[i];
+        int j = i - 1;
+
+        // Move elements of arr[0..i-1], that are greater than key, to one position ahead of their current position
+        while (j >= 0 && arr[j].name > key.name) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Function to print the student list
+void printStudentList(Student arr[], int n) {
+    cout << "Roll No\tName\tSGPA" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i].rollNo << "\t" << arr[i].name << "\t" << arr[i].sgpa << endl;
+    }
+}
+
+int main() {
+    int n;
+
+    // Sample list of students
+    Student students[] = {
+        {3, "Alice", 8.5},
+        {1, "Bob", 9.0},
+        {2, "Charlie", 7.8}
+    };
+
+    // Size of the array
+    n = sizeof(students) / sizeof(students[0]);
+
+    // Sort the students by name
+    insertionSort(students, n);
+
+    // Print the sorted list
+    printStudentList(students, n);
+
+    return 0;
+}
+ 
+Q3. Consider a student database of SEIT class. Database contains different fields of every student like Roll No, Name and SGPA Search students according to SGPA. e. Search a particular student according to name using binary search without recursion.
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Structure to store student details
+struct Student {
+    int rollNo;
+    string name;
+    float sgpa;
+};
+
+// Function to perform binary search without recursion
+int binarySearch(Student arr[], int n, string name) {
+    int left = 0, right = n - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        // Check if the name is present at mid
+        if (arr[mid].name == name)
+            return mid;
+
+        // If name is greater, ignore left half
+        if (arr[mid].name < name)
+            left = mid + 1;
+
+        // If name is smaller, ignore right half
+        else
+            right = mid - 1;
+    }
+    // If the name is not present
+    return -1;
+}
+
+// Function to print the student list
+void printStudentList(Student arr[], int n) {
+    cout << "Roll No\tName\tSGPA" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i].rollNo << "\t" << arr[i].name << "\t" << arr[i].sgpa << endl;
+    }
+}
+
+int main() {
+    int n;
+
+    // Sample list of students
+    Student students[] = {
+        {3, "Alice", 8.5},
+        {1, "Bob", 9.0},
+        {2, "Charlie", 7.8}
+    };
+
+    // Size of the array
+    n = sizeof(students) / sizeof(students[0]);
+
+    // Sort the students by name (assuming they are already sorted)
+    // If not sorted, use any sorting algorithm to sort the array by name
+
+    // Search for a particular student by name
+    string nameToSearch = "Bob";
+    int result = binarySearch(students, n, nameToSearch);
+
+    if (result != -1)
+        cout << "Student found at index: " << result << endl;
+    else
+        cout << "Student not found" << endl;
+
+    return 0;
+}
