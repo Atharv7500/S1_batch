@@ -1,91 +1,190 @@
-#include <iostream>
+#include<iostream>
+
+#include<stdlib.h>
+
 using namespace std;
 
-// Node structure
-struct Node {
-    int data;
-    Node* next;
+struct Node
+
+{
+
+int data;
+
+struct Node *next;
+
 };
 
-// Circular Queue class
-class CircularQueue {
-private:
-    Node* front;
-    Node* rear;
-public:
-    CircularQueue() {
-        front = rear = nullptr;
-    }
+Node *front = NULL;
 
-    // Function to check if the queue is empty
-    bool isEmpty() {
-        return front == nullptr;
-    }
+Node *rear = NULL;
 
-    // Function to insert an element (enqueue) into the circular queue
-    void enqueue(int value) {
-        Node* temp = new Node();
-        temp->data = value;
-        if (isEmpty()) {
-            front = rear = temp;
-            rear->next = front;
-        } else {
-            rear->next = temp;
-            rear = temp;
-            rear->next = front;
-        }
-    }
+void enqueue(int val)
 
-    // Function to delete an element (dequeue) from the circular queue
-    int dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return -1;
-        }
-        int value;
-        if (front == rear) {
-            value = front->data;
-            delete front;
-            front = rear = nullptr;
-        } else {
-            Node* temp = front;
-            value = front->data;
-            front = front->next;
-            rear->next = front;
-            delete temp;
-        }
-        return value;
-    }
+{
 
-    // Function to display the elements of the circular queue
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        Node* temp = front;
-        do {
-            cout << temp->data << " ";
-            temp = temp->next;
-        } while (temp != front);
-        cout << endl;
-    }
-};
+if(front==NULL && rear==NULL)
 
-int main() {
-    CircularQueue q;
+{
 
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    q.enqueue(40);
+struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
-    cout << "Circular Queue contents: ";
-    q.display();
+newNode->data = val;
 
-    cout << "Deleted element: " << q.dequeue() << endl;
-    cout << "Circular Queue contents after deletion: ";
-    q.display();
+newNode->next = NULL;
 
-    return 0;
+front = newNode;
+
+rear = newNode;
+
+cout << "Front : " << front -> data << endl;
+
+cout << "rear : " << rear -> data<< endl;
+
+}
+
+else
+
+{
+
+struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+
+newNode->data = val;
+
+rear->next = newNode;
+
+newNode->next = front;
+
+rear = newNode;
+
+cout << "Front : " << front -> data << endl;
+
+cout << "rear : " << rear -> data<< endl;
+
+}
+
+}
+
+void dequeue()
+
+{
+
+Node *n;
+
+n = front;
+
+front = front->next;
+
+delete(n);
+
+}
+
+void display()
+
+{
+
+if(front==NULL && rear==NULL)
+
+{
+
+cout << "Queue is empty" << endl;
+
+}
+
+else
+
+{
+
+Node *ptr;
+ptr = front;
+
+cout << "Front : " << front -> data << endl;
+
+cout << "rear : " << rear -> data<< endl;
+
+cout<< "Queue:";
+
+do
+
+{
+
+cout << ptr->data << " ";
+
+ptr = ptr->next;
+
+}
+
+while(ptr != rear->next);
+
+cout<<endl;
+
+cout<<endl;
+
+}
+
+}
+
+int main(void)
+
+{
+
+int ch,val;
+
+cout<<"1)Equeue\n";
+
+cout<<"2)Dequeue\n";
+
+cout<<"3)Display\n";
+
+cout<<"4)Exit\n";
+
+do
+
+{
+
+cout<<"Enter choice : "<<endl;
+
+cin>>ch;
+
+switch(ch)
+
+{
+
+case 1:
+
+cout<<"Element to enqueue: "<<endl;
+
+cin>>val;
+
+enqueue(val);
+
+break;
+
+case 2:
+
+dequeue();
+
+break;
+
+case 3:
+
+display();
+
+break;
+
+case 4:
+
+cout<<"Exit\n";
+
+break;
+
+default: cout<<"Incorrect choice!\n";
+
+}
+
+}
+
+while(ch != 4);
+
+return 0;
+
 }
