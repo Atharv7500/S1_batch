@@ -1,143 +1,245 @@
 #include <iostream>
-#include <string>
+
 using namespace std;
 
-// Node structure
-struct Node {
-    int data;
-    Node* next;
+struct Node
+
+{
+
+int data;
+
+struct Node *next;
+
 };
 
-// Stack class
-class Stack {
-private:
-    Node* top;
-public:
-    Stack() { top = nullptr; }
+struct Node* top = NULL;
 
-    // Function to push an element onto the stack
-    void push(int x) {
-        Node* t = new Node;
-        if (t == nullptr) {
-            cout << "Stack Overflow" << endl;
-        } else {
-            t->data = x;
-            t->next = top;
-            top = t;
-        }
-    }
+void push(int val)
 
-    // Function to pop an element from the stack
-    int pop() {
-        int x = -1;
-        if (top == nullptr) {
-            cout << "Stack Underflow" << endl;
-        } else {
-            Node* t = top;
-            top = top->next;
-            x = t->data;
-            delete t;
-        }
-        return x;
-    }
+{
 
-    // Function to check if the stack is empty
-    bool isEmpty() {
-        return top == nullptr;
-    }
+struct Node* newnode = (struct Node*) malloc(sizeof(struct Node));
 
-    // Function to get the top element of the stack
-    int stackTop() {
-        if (top)
-            return top->data;
-        return -1;
-    }
-};
+newnode->data = val;
+
+newnode->next = top;
+
+top = newnode;
+
+}
+
+void pop()
+
+{
+
+if(top==NULL)
+
+cout<<"\n Stack Underflow"<<endl;
+
+else
+
+{
+
+cout<<"\n The popped element is "<< top->data <<endl;
+
+top = top->next;
+
+}
+
+}
+
+void display()
+
+{
+
+struct Node* ptr;
+
+if(top==NULL)
+
+cout<<"\n stack is empty";
+
+else
+
+{
+
+ptr = top;
+
+cout<<"\n Stack elements are: ";
+
+while (ptr != NULL)
+
+{
+
+cout<< ptr->data <<" ";
+
+ptr = ptr->next;
+
+}
+
+cout<<endl;
+
+}
+}
+
+int main()
+
+{
+
+int ch, val;
+
+cout<<"\n 1) Push in stack";
+
+cout<<"\n 2) Pop from stack";
+
+cout<<"\n 3) Display stack";
+
+cout<<"\n 4) Exit";
+
+do
+
+{
+
+cout<<"\n Enter choice: ";
+
+cin>>ch;
+
+switch(ch)
+
+{
+
+case 1:
+
+cout<<"\n Enter value to be pushed:";
+
+cin>>val;
+
+push(val);
+
+break;
+
+case 2:
+
+pop();
+
+break;
+
+case 3:
+
+display();
+
+break;
+
+case 4:
+
+cout<<"\n Exit";
+
+break;
+
+}
+
+}while(ch!=4);
+
+return 0;
+
+}
 
 ### Step 2: Evaluating a Postfix Expression
 
 ```cpp
-#include <iostream>
-#include <string>
-#include <cctype> // For isdigit function
+#include<iostream>
+
+#include<stack>
+
+#include<math.h>
+
 using namespace std;
 
-class Stack {
-private:
-    struct Node {
-        int data;
-        Node* next;
-    };
-    Node* top;
-public:
-    Stack() { top = nullptr; }
+int evaluatePostfix(string postfix) 
 
-    void push(int x) {
-        Node* t = new Node;
-        if (t == nullptr) {
-            cout << "Stack Overflow" << endl;
-        } else {
-            t->data = x;
-            t->next = top;
-            top = t;
-        }
-    }
+{
 
-    int pop() {
-        int x = -1;
-        if (top == nullptr) {
-            cout << "Stack Underflow" << endl;
-        } else {
-            Node* t = top;
-            top = top->next;
-            x = t->data;
-            delete t;
-        }
-        return x;
-    }
+ stack<int> s;
 
-    bool isEmpty() {
-        return top == nullptr;
-    }
+ for(int i = 0; i < postfix.length(); i++) 
 
-    int stackTop() {
-        if (top)
-            return top->data;
-        return -1;
-    }
-};
+{
 
-// Function to evaluate postfix expression
-int evaluatePostfix(string postfix) {
-    Stack stk;
-    for (char &ch : postfix) {
-        if (isdigit(ch)) {
-            stk.push(ch - '0'); // Convert char to int and push to stack
-        } else {
-            int val2 = stk.pop();
-            int val1 = stk.pop();
-            switch (ch) {
-                case '+':
-                    stk.push(val1 + val2);
-                    break;
-                case '-':
-                    stk.push(val1 - val2);
-                    break;
-                case '*':
-                    stk.push(val1 * val2);
-                    break;
-                case '/':
-                    stk.push(val1 / val2);
-                    break;
-            }
-        }
-    }
-    return stk.pop();
+ char c = postfix[i];
+
+ if(isdigit(c)) 
+
+ {
+
+ s.push(c - '0');
+
+ } 
+
+ else 
+
+{
+
+ int operand2 = s.top(); s.pop();
+
+ int operand1 = s.top(); s.pop();
+
+ switch(c) 
+
+{
+
+ case '+':
+
+s.push(operand1 + operand2);
+
+break;
+
+ case '-': 
+
+s.push(operand1 - operand2); 
+
+break;
+
+ case '*': 
+
+s.push(operand1 * operand2); 
+
+break;
+
+ case '/': 
+
+s.push(operand1 / operand2); 
+
+break;
+
+ case '^':
+
+s.push(pow(operand1, operand2)); 
+
+break;
+
+ }
+
+ }
+
+ }
+
+ return s.top();
+
 }
 
-int main() {
-    string postfix = "231*+9-";
-    cout << "Postfix Expression: " << postfix << endl;
-    cout << "Evaluation Result: " << evaluatePostfix(postfix) << endl;
-    return 0;
+int main() 
+
+{
+
+ string postfix;
+
+ cout << "Enter postfix expression (single-digit operands): ";
+
+ cin >> postfix;
+
+ int result = evaluatePostfix(postfix);
+
+ cout << "Evaluation result: " << result << endl;
+
+ return 0;
+
 }
